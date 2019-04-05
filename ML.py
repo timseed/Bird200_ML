@@ -50,7 +50,20 @@ from keras import regularizers, optimizers
 
 SIZE_X = SIZE_Y = 70
 
-datagen=ImageDataGenerator(rescale=1./255.)
+#datagen=ImageDataGenerator(rescale=1./255.)
+datagen = ImageDataGenerator(
+    rescale=1./255.,
+    rotation_range=15,
+                               width_shift_range=0.1,
+                               height_shift_range=0.1,
+                               shear_range=0.01,
+                               zoom_range=[0.9, 1.25],
+                               horizontal_flip=True,
+                               vertical_flip=False,
+                               fill_mode='reflect',
+                               data_format='channels_last',
+                               brightness_range=[0.5, 1.5])
+
 
 # Train and Valid both come from TRAIN
 
@@ -75,7 +88,20 @@ class_mode="categorical",
 target_size=(SIZE_X,SIZE_Y))
 
 # Test comes from Test
-test_datagen=ImageDataGenerator(rescale=1./255.)
+#test_datagen=ImageDataGenerator(rescale=1./255.)
+test_datagen = ImageDataGenerator(
+    rescale=1./255.,
+    rotation_range=15,
+                               width_shift_range=0.1,
+                               height_shift_range=0.1,
+                               shear_range=0.01,
+                               zoom_range=[0.9, 1.25],
+                               horizontal_flip=True,
+                               vertical_flip=False,
+                               fill_mode='reflect',
+                               data_format='channels_last',
+                               brightness_range=[0.5, 1.5])
+
 test_generator=test_datagen.flow_from_dataframe(
 dataframe=df_test,
 x_col="file",
