@@ -2,8 +2,10 @@ import pandas as pd
 import tensorflow as tf
 from glob import glob
 from random import randint
+from keras import backend as K
 DIR_WHERE_IMAGES_ARE="data/trimmed/*/*"
 #In this case the classes are the 3rd level
+K.clear_session()
 
 def train_split_dataframes(dpath):
 
@@ -140,7 +142,8 @@ callbacks_wanted = [
   # Write TensorBoard logs to `./logs` directory
   tf.keras.callbacks.TensorBoard(log_dir='./logs',
                                  histogram_freq=0,
-                            write_graph=True, write_images=True)
+                                 write_graph=True,
+                                 write_images=True)
 ]
 
 STEP_SIZE_TRAIN=train_generator.n//train_generator.batch_size
@@ -151,7 +154,7 @@ model.fit_generator(generator=train_generator,
                     validation_data=valid_generator,
                     validation_steps=STEP_SIZE_VALID,
                     callbacks=callbacks_wanted,
-                    epochs=10
+                    epochs=20
 )
 
 model.save("birds.h5")
