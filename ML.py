@@ -117,22 +117,37 @@ target_size=(SIZE_X,SIZE_Y))
 model = Sequential()
 model.add(Conv2D(48, (3, 3), padding='same',
                  input_shape=(SIZE_X,SIZE_Y,3)))
-model.add(Activation('relu'))
-model.add(Conv2D(SIZE_X, (3, 3)))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
-model.add(Conv2D(96, (3, 3), padding='same'))
-model.add(Activation('relu'))
-model.add(Conv2D(96, (3, 3)))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
+
+weight_decay=0.00004
+model.add(BatchNormalization())
+model.add(Activation('elu'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.2))
+
+model.add(Conv2D(64, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('elu'))
+model.add(BatchNormalization())
+model.add(Conv2D(64, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('elu'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.3))
-model.add(Flatten())
-model.add(Dense(1024))
-model.add(Activation('relu'))
+
+model.add(Conv2D(128, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('elu'))
+model.add(BatchNormalization())
+model.add(Conv2D(128, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('elu'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.4))
+
+model.add(Flatten())
 model.add(Dense(CLASSES, activation='softmax'))
+
+model.summary()
+
 model.compile(optimizers.rmsprop(lr=0.0001, decay=1e-6),loss="categorical_crossentropy",metrics=["accuracy"])
 
 
