@@ -6,7 +6,10 @@ DIR_WHERE_IMAGES_ARE="data/trimmed/*/*"
 #In this case the classes are the 3rd level
 
 def train_split_dataframes(dpath):
-    df=pd.DataFrame.from_records([[g] for g in glob(DIR_WHERE_IMAGES_ARE)],columns=['file'])
+
+    records_all=[[g] for g in glob(DIR_WHERE_IMAGES_ARE)]
+    records = [ r for r in records_all if  r[0].find("Gull")!=-1]
+    df=pd.DataFrame.from_records(records,columns=['file'])
 
     df['Class']=df.file.apply(lambda x: x.split('/')[2])
     df['Test']=False
@@ -109,7 +112,7 @@ callbacks_wanted = [
   # Interrupt training if `val_loss` stops improving for over 2 epochs
   tf.keras.callbacks.EarlyStopping(patience=2, monitor='val_loss'),
   # Write TensorBoard logs to `./logs` directory
-  tf.keras.callbacks.TensorBoard(log_dir='./logs', 
+  tf.keras.callbacks.TensorBoard(log_dir='./logs',
                                  histogram_freq=0,
                             write_graph=True, write_images=True)
 ]
