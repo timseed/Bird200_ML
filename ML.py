@@ -12,7 +12,7 @@ DIR_WHERE_IMAGES_ARE = "data/trimmed/*/*"
 # In this case the classes are the 3rd level
 K.clear_session()
 
-WantedClasses = ['Woodpecker']
+WantedClasses = ['Grebe']
 
 
 def InWanted(file_name, wanted=WantedClasses):
@@ -69,10 +69,11 @@ df_test.merge(df_train, on='file')
 
 # Import from keras_preprocessing not from keras.preprocessing
 
-SIZE_X = SIZE_Y = 70
+SIZE_X = 90
+SIZE_Y = 50
 WINDOW = 32
-BATCH_SIZE = 150
-FEATURE_SIZE = (10, 10)
+BATCH_SIZE = 20
+FEATURE_SIZE = (8, 8)
 POOL_SIZE = (2, 2)
 ACT_MODE = 'elu'
 
