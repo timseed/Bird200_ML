@@ -71,11 +71,11 @@ df_test.merge(df_train, on='file')
 
 SIZE_X = 90
 SIZE_Y = 50
-WINDOW = 32
-BATCH_SIZE = 20
-FEATURE_SIZE = (8, 8)
+WINDOW = 18
+BATCH_SIZE = 3
+FEATURE_SIZE = (6,6)
 POOL_SIZE = (2, 2)
-ACT_MODE = 'elu'
+ACT_MODE = 'relu'
 
 # datagen=ImageDataGenerator(rescale=1./255.)
 datagen = ImageDataGenerator(
