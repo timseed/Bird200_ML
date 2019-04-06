@@ -10,7 +10,9 @@ K.clear_session()
 def train_split_dataframes(dpath):
 
     records_all=[[g] for g in glob(DIR_WHERE_IMAGES_ARE)]
-    records = [ r for r in records_all if  r[0].find("Gull")!=-1]
+    #records = [ r for r in records_all if  r[0].find("Gull")!=-1]
+    records = [ r for r in records_all if  r[0].find("Woodpecker")!=-1]
+
     df=pd.DataFrame.from_records(records,columns=['file'])
 
     df['Class']=df.file.apply(lambda x: x.split('/')[2])
