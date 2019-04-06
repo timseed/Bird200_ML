@@ -7,11 +7,25 @@ DIR_WHERE_IMAGES_ARE="data/trimmed/*/*"
 #In this case the classes are the 3rd level
 K.clear_session()
 
+WantedClasses=['Woodpecker']
+
+def InWanted(file_name,wanted=WantedClasses):
+    """
+    InWanted. Check isthe filename contains one of the Classwords
+    """
+    rv=False
+    for w_obj in WantedClasses:
+        if file_name.find(w_obj) != -1:
+            rv=True
+            break
+    return rv
+
+
 def train_split_dataframes(dpath):
 
     records_all=[[g] for g in glob(DIR_WHERE_IMAGES_ARE)]
     #records = [ r for r in records_all if  r[0].find("Gull")!=-1]
-    records = [ r for r in records_all if  r[0].find("Woodpecker")!=-1]
+    records = [ r for r in records_all if  InWanted(r[0],WantedClasses)]
 
     df=pd.DataFrame.from_records(records,columns=['file'])
 
@@ -117,33 +131,36 @@ class_mode="categorical",
 target_size=(SIZE_X,SIZE_Y))
 
 WINDOW=32
+FEATURE_SIZE=(3,3)
+POOL_SIZE=(2,2)
+ACT_MODE='elu'
 model = Sequential()
-model.add(Conv2D(WINDOW, (3, 3), padding='same',
+model.add(Conv2D(WINDOW, FEATURE_SIZE, padding='same',
                  input_shape=(SIZE_X,SIZE_Y,3)))
 
 weight_decay=0.001
 model.add(BatchNormalization())
-model.add(Activation('elu'))
+model.add(Activation(ACT_MODE))
 model.add(BatchNormalization())
-model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(MaxPooling2D(pool_size=POOL_SIZE))
 model.add(Dropout(0.2))
 
-model.add(Conv2D(WINDOW*2, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-model.add(Activation('elu'))
+model.add(Conv2D(WINDOW*2, FEATURE_SIZE, padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation(ACT_MODE))
 model.add(BatchNormalization())
-model.add(Conv2D(WINDOW*2, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-model.add(Activation('elu'))
+model.add(Conv2D(WINDOW*2, FEATURE_SIZE, padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation(ACT_MODE))
 model.add(BatchNormalization())
-model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(MaxPooling2D(pool_size=POOL_SIZE))
 model.add(Dropout(0.3))
 
-model.add(Conv2D(WINDOW*4, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-model.add(Activation('elu'))
+model.add(Conv2D(WINDOW*4, FEATURE_SIZE, padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation(ACT_MODE))
 model.add(BatchNormalization())
-model.add(Conv2D(WINDOW*4, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
-model.add(Activation('elu'))
+model.add(Conv2D(WINDOW*4, FEATURE_SIZE, padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation(ACT_MODE))
 model.add(BatchNormalization())
-model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(MaxPooling2D(pool_size=POOL_SIZE))
 model.add(Dropout(0.4))
 
 model.add(Flatten())
