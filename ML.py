@@ -80,12 +80,12 @@ class_mode="categorical",
 target_size=(SIZE_X,SIZE_Y))
 
 valid_generator=datagen.flow_from_dataframe(
-dataframe=df_train,
-x_col="file",
-y_col="Class",
-batch_size=32,
-seed=42,
-shuffle=True,
+    dataframe=df_train,
+    x_col="file",
+    y_col="Class",
+    batch_size=32,
+    seed=42,
+    shuffle=True,
 class_mode="categorical",
 target_size=(SIZE_X,SIZE_Y))
 
@@ -114,30 +114,31 @@ shuffle=True,
 class_mode="categorical",
 target_size=(SIZE_X,SIZE_Y))
 
+WINDOW=32
 model = Sequential()
-model.add(Conv2D(48, (3, 3), padding='same',
+model.add(Conv2D(WINDOW, (3, 3), padding='same',
                  input_shape=(SIZE_X,SIZE_Y,3)))
 
-weight_decay=0.00004
+weight_decay=0.001
 model.add(BatchNormalization())
 model.add(Activation('elu'))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.2))
 
-model.add(Conv2D(64, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Conv2D(WINDOW*2, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
 model.add(Activation('elu'))
 model.add(BatchNormalization())
-model.add(Conv2D(64, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Conv2D(WINDOW*2, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
 model.add(Activation('elu'))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.3))
 
-model.add(Conv2D(128, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Conv2D(WINDOW*4, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
 model.add(Activation('elu'))
 model.add(BatchNormalization())
-model.add(Conv2D(128, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Conv2D(WINDOW*4, (3,3), padding='same', kernel_regularizer=regularizers.l2(weight_decay)))
 model.add(Activation('elu'))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
@@ -169,7 +170,7 @@ model.fit_generator(generator=train_generator,
                     validation_data=valid_generator,
                     validation_steps=STEP_SIZE_VALID,
                     callbacks=callbacks_wanted,
-                    epochs=20
+                    epochs=50
 )
 
 model.save("birds.h5")
