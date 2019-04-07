@@ -12,7 +12,7 @@ DIR_WHERE_IMAGES_ARE = "data/trimmed/*/*"
 # In this case the classes are the 3rd level
 K.clear_session()
 
-WantedClasses = ['Grebe']
+WantedClasses = ['Grebe','Tern']
 
 
 def InWanted(file_name, wanted=WantedClasses):
@@ -69,8 +69,7 @@ df_test.merge(df_train, on='file')
 
 # Import from keras_preprocessing not from keras.preprocessing
 
-SIZE_X = 90
-SIZE_Y = 50
+SIZE_Y = SIZE_X = 90
 WINDOW = 18
 BATCH_SIZE = 3
 FEATURE_SIZE = (6,6)
